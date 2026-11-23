@@ -106,25 +106,12 @@ The supervisor chose a Studio of its own (Option B of proposal `2026-11-19-002`)
 
 **Not decided here.** `[TK]` provenance does not fit: the Studio's client-recorded provenance names blyg items as sources, and this project's sources are government documents. AI authorship is disclosed in the dossier text instead, as the template does now.
 
-## Setting up the Pothole Portolan Studio (supervisor steps)
+## The Pothole Portolan Studio (set up 2026-11-23)
 
-These steps run on your own machine, because they use your Cloudflare login and ask for your owner password. The domain you plan to use must already be a zone on the Cloudflare account.
+The Studio lives in its own repository, `patwater/pothole-portolan-blyg`, which plays the role of World Machines' private `wm-blyg` checkout. It holds an unmodified Blygger Studio at release v0.71.0 with its full upstream history, so later upgrades merge cleanly, plus three Pothole Portolan files: `wrangler.jsonc` (Worker, D1 database and R2 bucket all named `pothole-portolan-blyg`, with no IDs), `scripts/pothole-deploy.sh` (the deploy command) and `POTHOLE-PORTOLAN.md` (the setup, connection and upgrade steps). Follow that file to deploy it from the Cloudflare dashboard and to connect this repository's `blyg-drafts` workflow.
 
-```bash
-git clone https://github.com/blygger/blygger-studio pothole-studio
-cd pothole-studio
-npm ci
-npx wrangler login
-npm run init
-```
+Why no IDs: Wrangler 4.156 provisions a D1 database or R2 bucket named in the config when it does not exist, and finds it by name when it does, without prompting in a build. So the Cloudflare dashboard's Git build can deploy the Studio without anyone copying a database ID into the config, and no Cloudflare token had to be given to an agent.
 
-`npm run init` asks which account to use, the zone (for example `pioneeringspirit.xyz`) and the subdomain label (for example `potholes`). It then creates the D1 database and R2 bucket, applies the migrations, has Wrangler prompt for `OWNER_PASSWORD`, generates `COOKIE_SECRET` itself, writes `site_url`, and deploys with the custom domain attached, so no DNS record has to be made by hand. It names the Worker after the host (`blyg-<host-with-dashes>`). Do not name it `pothole-portolan`, because that Worker is rebuilt from this repository's placeholder site on every push.
+**Verified on 2026-11-23, locally with `wrangler dev`:** the Worker builds (1.7 MB compressed), all 58 migrations apply, and `scripts/blygger_client/push_drafts.py` created the San Francisco draft, sent nothing on an unchanged rerun, and updated the same item for a version 2. A token with `owner:read` and `owner:draft` got HTTP 403 "insufficient scope" when it tried to publish. After an owner publish, the public item had its three tables, the numbered notes and no formulas. The Studio reported contract 6.3.0; the client's calls are unchanged from 5.14.0, since 6.0.0 removed only `getChanges`, which the client does not use.
 
-Then, in the Studio at `https://<host>/studio`:
-
-1. Sign in, and set the title (for example "Pothole Portolan") and the author in Settings.
-2. Under More, Client access, create a REST API token with **owner:read and owner:draft only**, and copy it before closing the dialog. It expires after 30 days.
-3. In this repository's GitHub settings (Secrets and variables, Actions), add the secret `BLYGGER_DRAFT_TOKEN` with that token, and the variable `BLYGGER_API_BASE` set to `https://<host>/api`. If the repository is public, also set `BLYGGER_ARCHIVE_BASE` to `https://github.com/patwater/pothole-portolan/blob/main/` so archive paths become links.
-4. Run the `blyg-drafts` workflow by hand with the dry run on, and read the plan in the log. Then run it with the dry run off. The San Francisco dossier should appear as a draft in the Studio.
-
-Keep the Studio checkout: upgrades run from it (`npm run upgrade`).
+**Not yet verified:** the Cloudflare dashboard build itself, including whether its default build token may create D1 and R2 resources. `POTHOLE-PORTOLAN.md` says what to do if it may not.
