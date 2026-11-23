@@ -17,6 +17,7 @@ from blygger_client import (  # noqa: E402
     RenderError, StudioClient, StudioError, WritePathUnavailable, publish_allowed, to_blyg_markdown,
 )
 from blygger_client.client import token_expiry  # noqa: E402
+from blygger_client.render import DISCLAIMER  # noqa: E402
 from blygger_client import push_drafts  # noqa: E402
 
 SHA = "a" * 64
@@ -72,6 +73,19 @@ class RenderTests(unittest.TestCase):
     def test_control_character_refused(self):
         with self.assertRaises(RenderError):
             to_blyg_markdown("# T\n\nBad \x07 bell.\n")
+
+    def test_disclaimer_sits_under_the_title(self):
+        _, md = to_blyg_markdown(DRAFT.format(v=1))
+        lines = md.split("\n")
+        self.assertEqual(lines[0], "# Testville")
+        self.assertEqual(lines[2], DISCLAIMER)
+        self.assertEqual(md.count(DISCLAIMER), 1)
+        self.assertIn("published as is", DISCLAIMER)
+        self.assertIn("may contain inaccuracies", DISCLAIMER)
+
+    def test_disclaimer_without_a_title_goes_first(self):
+        _, md = to_blyg_markdown("Just a paragraph.\n")
+        self.assertTrue(md.startswith(DISCLAIMER + "\n\nJust a paragraph."))
 
     def test_code_spans_keep_dollars(self):
         _, md = to_blyg_markdown("# T\n\nUse `$limit` and pay $5.\n")

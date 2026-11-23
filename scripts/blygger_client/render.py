@@ -12,6 +12,8 @@ blygger-studio source, src/markdown.ts, on 2026-11-19). Tables render; footnotes
   to archive_base + path, so a reader can open the archived copy (CLAUDE.md rule 1).
 - A "$" in prose is escaped as "\\$", because the Studio's math plugin reads "$...$" as TeX. Dollars
   inside code spans, autolinks and link destinations (the Socrata query URLs) are left as written.
+- A disclaimer (DISCLAIMER below) that the dossier was written with AI automation, is published
+  as is and may contain inaccuracies is placed under the title of every dossier.
 - The text is put in Unicode Normalization Form C, and control characters other than tab, line
   feed and carriage return are refused, as the protocol requires of content_md (spec 0.4).
 
@@ -30,6 +32,24 @@ BAD_CONTROL = re.compile(r"[\x00-\x08\x0b\x0c\x0e-\x1f\x7f]")
 
 class RenderError(ValueError):
     pass
+
+
+# Added to every dossier sent to the Studio, right under its title (supervisor's instruction,
+# 2026-11-23). It lives here rather than in each dossier so that no published dossier can omit it.
+DISCLAIMER = (
+    "*This dossier was researched and written with AI automation and is published as is. "
+    "It may contain inaccuracies. Every figure cites its source, retrieval date and archived copy "
+    "in the Notes, so please check a number against its source before relying on it.*"
+)
+
+
+def add_disclaimer(body):
+    """Insert DISCLAIMER as its own paragraph after the first level-one heading, or at the top."""
+    lines = body.split("\n")
+    for i, line in enumerate(lines):
+        if line.startswith("# "):
+            return "\n".join(lines[:i + 1] + ["", DISCLAIMER] + lines[i + 1:])
+    return DISCLAIMER + "\n\n" + body
 
 
 # Spans whose dollars must stay as written: code spans, autolinks and link destinations. Any other
@@ -129,6 +149,7 @@ def to_blyg_markdown(text, archive_base=None):
         body = ARCHIVE.sub(lambda m: f"[`{m.group(1)}`]({base}{m.group(1)})", body)
 
     body = escape_dollars(body)
+    body = add_disclaimer(body)
     body = unicodedata.normalize("NFC", body)
     bad = BAD_CONTROL.search(body)
     if bad:
