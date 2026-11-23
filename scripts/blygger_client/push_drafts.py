@@ -28,6 +28,7 @@ Exit 0 on success or when there is nothing to do, 1 on an error, 2 when it refus
 import argparse
 import datetime as dt
 import hashlib
+import json
 import os
 import re
 import sys
@@ -36,7 +37,7 @@ from pathlib import Path
 sys.path.insert(0, str(Path(__file__).resolve().parent.parent))
 import yaml  # noqa: E402
 
-from blygger_client.client import StudioClient, StudioError, load_permissions  # noqa: E402
+from blygger_client.client import StudioClient, StudioError, load_permissions, token_expiry  # noqa: E402
 from blygger_client.render import RenderError, to_blyg_markdown  # noqa: E402
 
 LEDGER = "ledger/blyg_items.yaml"
@@ -162,6 +163,35 @@ def plan_and_push(root, client, api_base, archive_base=None, only=None, dry_run=
     return errors
 
 
+RENEW_WITHIN_DAYS = 7
+
+
+def token_status(token, now=None):
+    """{"expires": "YYYY-MM-DD" or None, "days_left": int or None, "renew": bool}. Never the token."""
+    exp = token_expiry(token)
+    if exp is None:
+        return {"expires": None, "days_left": None, "renew": False}
+    now = now if now is not None else dt.datetime.now(dt.timezone.utc).timestamp()
+    days_left = int((exp - now) // 86400)
+    expires = dt.datetime.fromtimestamp(exp, dt.timezone.utc).strftime("%Y-%m-%d")
+    return {"expires": expires, "days_left": days_left, "renew": days_left <= RENEW_WITHIN_DAYS}
+
+
+def report_token(token, status_file=None, now=None, log=print):
+    s = token_status(token, now)
+    if s["expires"] is None:
+        log("Studio token expiry could not be read; renew it within 30 days of creating it.")
+    else:
+        log(f"Studio token expires on {s['expires']} ({s['days_left']} days left).")
+        if s["renew"]:
+            log(f"::warning title=Renew the Studio token::It expires on {s['expires']}. Create a new one in the "
+                "Studio (More, Client access, REST API, owner:read and owner:draft) and replace the "
+                "BLYGGER_DRAFT_TOKEN secret.")
+    if status_file:
+        Path(status_file).write_text(json.dumps(s), encoding="utf-8")
+    return s
+
+
 def main(argv=None):
     ap = argparse.ArgumentParser(description=__doc__.split("\n")[0])
     ap.add_argument("--root", default=".")
@@ -180,6 +210,8 @@ def main(argv=None):
     if not api_base:
         print("REFUSED: BLYGGER_API_BASE is not set.")
         return 2
+    if token:
+        report_token(token, os.environ.get("BLYGGER_TOKEN_STATUS_FILE", "").strip() or None)
     client = None
     if not args.dry_run:
         if not token:

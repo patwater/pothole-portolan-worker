@@ -21,6 +21,7 @@ Rules kept here:
 - publish() checks the phase in permissions.yaml first, so a caller that holds a publish token in
   the wrong phase still cannot publish (CLAUDE.md rule 3).
 """
+import base64
 import json
 import urllib.error
 import urllib.parse
@@ -38,6 +39,22 @@ class StudioError(RuntimeError):
 
 class WritePathUnavailable(RuntimeError):
     pass
+
+
+def token_expiry(token):
+    """The `exp` claim (Unix seconds) of a Studio token, or None if it cannot be read.
+
+    Studio tokens are RS256 JWTs (better-auth's jwt plugin, src/oauth.ts). The payload is read
+    without verifying the signature, because the only use is a reminder to renew; the Studio
+    still verifies every request. Every Studio credential ends within 30 days by design
+    (docs/client-access.md), so a reminder is the way to make renewal predictable."""
+    try:
+        payload = token.split(".")[1]
+        payload += "=" * (-len(payload) % 4)
+        exp = json.loads(base64.urlsafe_b64decode(payload)).get("exp")
+        return int(exp) if isinstance(exp, (int, float)) else None
+    except (IndexError, ValueError, AttributeError):
+        return None
 
 
 def publish_allowed(permissions):

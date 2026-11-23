@@ -16,6 +16,7 @@ sys.path.insert(0, str(Path(__file__).resolve().parent.parent / "scripts"))
 from blygger_client import (  # noqa: E402
     RenderError, StudioClient, StudioError, WritePathUnavailable, publish_allowed, to_blyg_markdown,
 )
+from blygger_client.client import token_expiry  # noqa: E402
 from blygger_client import push_drafts  # noqa: E402
 
 SHA = "a" * 64
@@ -263,6 +264,47 @@ class PushDraftsTests(unittest.TestCase):
         found = push_drafts.latest_drafts(self.root)
         self.assertEqual(list(found), ["testville"])
         self.assertEqual(found["testville"][0], 3)
+
+
+def fake_jwt(claims):
+    import base64
+
+    def part(obj):
+        return base64.urlsafe_b64encode(json.dumps(obj).encode()).rstrip(b"=").decode()
+    return f"{part({'alg': 'RS256'})}.{part(claims)}.signature"
+
+
+class TokenExpiryTests(unittest.TestCase):
+    NOW = 1_800_000_000
+
+    def test_reads_exp_without_verifying(self):
+        self.assertEqual(token_expiry(fake_jwt({"exp": self.NOW, "scope": "owner:draft"})), self.NOW)
+
+    def test_unreadable_tokens_give_none(self):
+        for bad in ("", "opaque-token", "a.b.c", fake_jwt({"scope": "x"}), fake_jwt({"exp": "soon"})):
+            self.assertIsNone(token_expiry(bad), bad)
+
+    def test_renewal_window_is_seven_days(self):
+        day = 86400
+        far = push_drafts.token_status(fake_jwt({"exp": self.NOW + 20 * day}), now=self.NOW)
+        near = push_drafts.token_status(fake_jwt({"exp": self.NOW + 7 * day}), now=self.NOW)
+        gone = push_drafts.token_status(fake_jwt({"exp": self.NOW - day}), now=self.NOW)
+        self.assertEqual((far["days_left"], far["renew"]), (20, False))
+        self.assertEqual((near["days_left"], near["renew"]), (7, True))
+        self.assertTrue(gone["renew"])
+        self.assertRegex(far["expires"], r"^\d{4}-\d{2}-\d{2}$")
+
+    def test_report_writes_status_and_never_the_token(self):
+        token = fake_jwt({"exp": self.NOW + 3 * 86400, "sub": "owner"})
+        with tempfile.TemporaryDirectory() as d:
+            f = Path(d) / "status.json"
+            lines = []
+            push_drafts.report_token(token, str(f), now=self.NOW, log=lines.append)
+            written = f.read_text()
+            self.assertEqual(json.loads(written)["renew"], True)
+            self.assertNotIn(token, written)
+            self.assertTrue(any("::warning" in line for line in lines))
+            self.assertFalse(any(token in line for line in lines))
 
 
 if __name__ == "__main__":
