@@ -1,0 +1,14 @@
+# Written by scripts/blygger_client/push_drafts.py (workflow blyg-drafts). Do not edit by hand.
+# Maps each city to its item in the Pothole Portolan Studio, and records the sha256 of the
+# Markdown last sent, so an unchanged draft is not sent again.
+items:
+  san-francisco:
+    content_sha256: 47d5e730e7fc0737d69bd47776e3d3594f1f888464c6216a5e6c6f223f7a41fd
+    dossier_version: 1
+    draft: queue/drafts/san-francisco-v1.md
+    item_id: 1a5p1qapbcf4ff2ym7k505p2e9
+    published_version: 0
+    pushed: '2026-11-23T22:02:48Z'
+    revision: 1
+    status: draft
+studio: https://pothole-portolan-blyg.patrickatwater.workers.dev/
