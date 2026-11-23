@@ -41,12 +41,21 @@ jobs:
           lfs: true                    # no effect until sources/ is migrated to Git LFS (docs/automation.md); then the hash check needs the content
           persist-credentials: false   # no token on disk while the agent runs
 
-      - name: Stop early if PAUSE exists
+      - name: Stop early if PAUSE exists or the API key is missing
         id: pause
+        env:
+          # Only whether the secret is set, never its value.
+          ANTHROPIC_KEY_SET: ${{ secrets.ANTHROPIC_API_KEY != '' }}
         run: |
           if [ -f PAUSE ]; then
             echo "paused=true" >> "$GITHUB_OUTPUT"
             echo "::warning title=Funnel paused::PAUSE exists at the repo root. No model calls, no pushes, no issue update (CLAUDE.md rule 6)."
+          elif [ "$ANTHROPIC_KEY_SET" != "true" ]; then
+            # Without this check every model call fails on its first turn, and the loop blames and
+            # blocks the city it was working on (first seen 2026-11-23, run 45275676927, chicago).
+            echo "paused=true" >> "$GITHUB_OUTPUT"
+            echo "::error title=ANTHROPIC_API_KEY is not set::Add the ANTHROPIC_API_KEY secret (Settings, Secrets and variables, Actions). Nothing ran and no city was blocked."
+            exit 1
           else
             echo "paused=false" >> "$GITHUB_OUTPUT"
           fi

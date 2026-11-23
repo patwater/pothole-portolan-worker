@@ -38,7 +38,10 @@ behaviors:
     credentials: []
     prompt: >
       Scout the city. Create cities/<slug>/ with notes.md describing the kind of data regime the city
-      appears to have, and a status.yaml with stage scouted, blocked_on null and last_run null.
+      appears to have, and a status.yaml with stage scouted, blocked_on null and last_run null (if
+      status.yaml already exists, set those fields in it). Also create claims.yaml and sources.yaml,
+      each containing only an empty list ([]), because the content checks require both files from
+      the first stage on; Discover and Extract fill them later.
       Everything you write about the city is a hypothesis until a later behavior fetches a source.
   discover:
     trigger: funnel
