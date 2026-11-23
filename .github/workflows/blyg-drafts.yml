@@ -9,7 +9,12 @@
 #   - after each funnel run (its commits are pushed with GITHUB_TOKEN, which does not trigger
 #     push workflows, so workflow_run is the hook);
 #   - on a push to main that changes queue/drafts/ (the supervisor's own edits);
-#   - by hand, as a dry run by default.
+#   - by hand, as a dry run by default;
+#   - weekly, so the token reminder below runs even when no draft is waiting.
+#
+# Token reminder: every Studio credential ends within 30 days by the Studio's design, and no
+# setting lengthens it. The token is a JWT, so each run reads its expiry date (without logging
+# the token), and from 7 days before it opens one issue labelled studio-token with the steps.
 #
 # Setup (Settings, Secrets and variables, Actions):
 #   secret   BLYGGER_DRAFT_TOKEN   Studio REST token (Studio, More, Client access, REST API) with
@@ -28,6 +33,8 @@ on:
   push:
     branches: [main]
     paths: ["queue/drafts/**"]
+  schedule:
+    - cron: "41 15 * * 3"   # Wednesdays, between the Monday and Thursday funnel runs
   workflow_dispatch:
     inputs:
       dry_run:
@@ -41,6 +48,7 @@ concurrency:
 
 permissions:
   contents: write   # commit ledger/blyg_items.yaml
+  issues: write     # the token renewal reminder
 
 jobs:
   push:
@@ -50,6 +58,7 @@ jobs:
       BLYGGER_DRAFT_TOKEN: ${{ secrets.BLYGGER_DRAFT_TOKEN }}
       BLYGGER_API_BASE: ${{ vars.BLYGGER_API_BASE }}
       BLYGGER_ARCHIVE_BASE: ${{ vars.BLYGGER_ARCHIVE_BASE }}
+      BLYGGER_TOKEN_STATUS_FILE: ${{ github.workspace }}/../token-status.json
     steps:
       - uses: actions/checkout@v7
         with:
@@ -76,6 +85,32 @@ jobs:
           args=()
           if [ "$DRY_RUN" = "true" ]; then args+=(--dry-run); fi
           python3 -I scripts/blygger_client/push_drafts.py "${args[@]}"
+
+      - name: Open a reminder when the Studio token is about to expire
+        if: always()
+        env:
+          GH_TOKEN: ${{ github.token }}
+          GH_REPO: ${{ github.repository }}
+        run: |
+          set -euo pipefail
+          f="$BLYGGER_TOKEN_STATUS_FILE"
+          [ -f "$f" ] || { echo "No token status (Studio not configured)."; exit 0; }
+          renew="$(python3 -I -c 'import json,sys; print(json.load(open(sys.argv[1]))["renew"])' "$f")"
+          expires="$(python3 -I -c 'import json,sys; print(json.load(open(sys.argv[1]))["expires"])' "$f")"
+          if [ "$renew" != "True" ]; then echo "Token good until $expires."; exit 0; fi
+          gh label create studio-token --description "Studio token renewal" --color D93F0B 2>/dev/null || true
+          if [ -n "$(gh issue list --label studio-token --state open --limit 1 --json number --jq '.[0].number // empty')" ]; then
+            echo "A renewal issue is already open."
+            exit 0
+          fi
+          gh issue create --label studio-token --title "Renew the Studio token (expires $expires)" --body "The \`BLYGGER_DRAFT_TOKEN\` secret expires on **$expires**. Every Studio credential ends within 30 days by the Studio's design, so this comes round once a month.
+
+          1. Sign in to the Studio at \`/studio\`, open More, then Client access.
+          2. Create a REST API token named \`pothole-portolan blyg-drafts\` with only **owner:read** and **owner:draft**, and copy it.
+          3. In this repository, open Settings, then Secrets and variables, then Actions, and update \`BLYGGER_DRAFT_TOKEN\`.
+          4. Revoke the old token in Client access, then close this issue.
+
+          Opened by the blyg-drafts workflow."
 
       - name: Commit the Studio item ledger
         if: github.event_name != 'workflow_dispatch' || inputs.dry_run == false
