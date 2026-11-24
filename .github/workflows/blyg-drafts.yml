@@ -105,7 +105,7 @@ jobs:
           fi
           gh issue create --label studio-token --title "Renew the Studio token (expires $expires)" --body "The \`BLYGGER_DRAFT_TOKEN\` secret expires on **$expires**. Every Studio credential ends within 30 days by the Studio's design, so this comes round once a month.
 
-          1. Sign in to the Studio at \`/studio\`, open More, then Client access.
+          1. Sign in to the Studio at ${BLYGGER_API_BASE%/api}/studio (that exact address: a token works only at the address where it was created), and open More, then Client access.
           2. Create a REST API token named \`pothole-portolan blyg-drafts\` with only **owner:read** and **owner:draft**, and copy it.
           3. In this repository, open Settings, then Secrets and variables, then Actions, and update \`BLYGGER_DRAFT_TOKEN\`.
           4. Revoke the old token in Client access, then close this issue.

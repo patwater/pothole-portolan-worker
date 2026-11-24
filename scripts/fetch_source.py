@@ -51,14 +51,15 @@ MAX_BYTES = 50 * 1024 * 1024
 AGGREGATE_MAX_BYTES = 2 * 1024 * 1024   # an aggregate or metadata response is small; larger is suspect
 AGGREGATE_MAX_ROWS = 2000
 # Socrata portals where only metadata and aggregates may be requested (proposal 2026-11-17-001).
-AGGREGATE_ONLY_HOSTS = {"data.sf.gov", "data.sfgov.org"}
+# Chicago added 2026-11-24 on the supervisor's instruction, before the funnel first fetches for Chicago.
+AGGREGATE_ONLY_HOSTS = {"data.sf.gov", "data.sfgov.org", "data.cityofchicago.org"}
 DATASET_ID = r"[a-z0-9]{4}-[a-z0-9]{4}"
 METADATA_PATH = re.compile(rf"^/api/views/{DATASET_ID}(?:\.json|/columns\.json|/columns/\d+\.json)?$")
 RESOURCE_PATH = re.compile(rf"^/resource/{DATASET_ID}\.(?:json|csv)$")
 AGGREGATE_FUNCTIONS = ("count", "sum", "avg", "min", "max", "median", "stddev_pop", "stddev_samp")
 # Group keys that would turn an aggregate into a record listing or expose a person or place.
 FORBIDDEN_GROUP_KEY = re.compile(
-    r"(address|addr\b|street|lat\b|long\b|lon\b|location|point|geom|coordinate|"
+    r"(address|addr\b|street|lat\b|latitude|long\b|lon\b|longitude|location|point|geom|coordinate|"
     r"(first|last|full|requester|reporter|customer|resident|contact|owner)_?name|phone|email|"
     r"description|comment|notes?|media|url|requester|reporter|caller|"
     r"(^|_)id(\b|_)|request_id|case_id|ticket|number)", re.I)
@@ -184,6 +185,11 @@ def aggregate_rows_exceeded(url, body):
 SENSITIVE_FIELDS = {
     "address", "street", "lat", "long", "point", "point_address", "point_city", "point_geom", "point_state",
     "point_zip", "status_notes", "media_url", "service_request_id",
+    # Chicago 311 columns that locate or identify a single request (added 2026-11-24, ahead of the first
+    # Chicago fetch; names to be confirmed against the dataset's column metadata, which may be fetched).
+    "street_address", "street_number", "street_name", "street_direction", "street_type", "latitude",
+    "longitude", "x_coordinate", "y_coordinate", "location", "sr_number", "parent_sr_number",
+    "legacy_sr_number",
 }
 # Fields that may appear only inside a narrowly scoped query. service_details is the third level of the 311
 # case taxonomy: it is needed to tell potholes from other pavement defects, but it can hold typed text, so it
@@ -196,6 +202,11 @@ MIN_GROUP_SIZE = 10
 DATASET_POLICY = {
     "vw6y-z8j6": {"aggregate_only": True, "max_limit": 5000},   # SF 311 Cases (record-level)
     "kc49-udxn": {"aggregate_only": False, "max_limit": 5000},  # SF Scorecard Measures (department measures)
+    # Chicago, registered 2026-11-24 before the first Chicago fetch. Both are record-level 311 data, so only
+    # grouped counts are allowed. If Discover finds that the ids differ, the real ones are refused until
+    # registered, which is the safe way to be wrong.
+    "v6vf-nfxy": {"aggregate_only": True, "max_limit": 5000},   # Chicago 311 Service Requests (record-level)
+    "7as2-ds3y": {"aggregate_only": True, "max_limit": 5000},   # Chicago 311 Pot Holes Reported, historical (record-level)
 }
 
 
