@@ -139,9 +139,12 @@ def plan_and_push(root, client, api_base, archive_base=None, only=None, dry_run=
         except StudioError as e:
             log(f"{slug}: Studio refused ({e}); nothing recorded.")
             if e.status in (401, 403):
-                log("  Studio REST tokens expire after at most 30 days, and a token without owner:read "
-                    "and owner:draft gets 403. Mint a new one in Studio (More, Client access, REST API) "
-                    "and update the BLYGGER_DRAFT_TOKEN secret.")
+                log("  A Studio token works only at the address where it was created: the Studio puts "
+                    "that address in the token and checks it (src/oauth.ts, verifyBearer). So sign in at "
+                    f"{studio}studio, not another address of the same Studio, and mint the token there. "
+                    "Tokens also expire after at most 30 days, and one without owner:read and owner:draft "
+                    "gets 403. Mint a new one (More, Client access, REST API) and update the "
+                    "BLYGGER_DRAFT_TOKEN secret.")
             errors += 1
             continue
         ledger["studio"] = studio
