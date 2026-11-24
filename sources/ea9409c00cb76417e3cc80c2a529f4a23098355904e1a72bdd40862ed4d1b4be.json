@@ -1,0 +1,494 @@
+{
+ "id": "7as2-ds3y",
+ "name": "311 Service Requests - Pot Holes Reported - Historical",
+ "assetType": "dataset",
+ "attribution": "City of Chicago",
+ "attributionLink": "http://www.cityofchicago.org",
+ "averageRating": 0,
+ "category": "Service Requests",
+ "createdAt": 1317373862,
+ "description": "As described in https://data.cityofchicago.org/stories/s/311-Dataset-Changes-12-11-2018/d7nq-5g7t, the function of this dataset was replaced by https://data.cityofchicago.org/d/v6vf-nfxy. This dataset is historical-only.\r\n\r\nThe Chicago Department of Transportation (CDOT) oversees the patching of potholes on over 4,000 miles of arterial and residential streets in Chicago. CDOT receives reports of potholes through the 311 call center and uses a computerized mapping and tracking system to identify pothole locations and efficiently schedule crews.  One call to 311 can generate multiple pothole repairs. When a crew arrives to repair a 311 pothole, it fills all the other potholes within the block.  Pothole repairs are generally completed within 7 days from the first report of a pothole to 311. Weather conditions, particularly frigid temps and precipitation, influence how long a repair takes.  On days when weather is cooperative and there is no precipitation, crews can fill several thousand potholes.  \r\n\r\nIf a previous request is already open for a buffer of 4 addresses the request is given the status of \"Duplicate (Open)\".  For example, if there is an existing CSR for 6535 N Western and a new request is received for 6531 N Western (which is within four addresses of the original CSR) then the new request is given a status of \"Duplicate (Open)\".\r\n\r\nOnce the street is repaired, the status in CSR will read “Completed” for the original request and \"Duplicate (Closed)\" for any duplicate requests.  A service request also receives the status of “Completed” when the reported address is inspected but no potholes are found or have already been filled.  If another issue is found with the street, such as a “cave-in” or “failed utility cut”, then it is directed to the appropriate department or contractor. \r\n\r\nData Owner: Transportation. Time Period: All open requests and all completed requests since January 1, 2011. Frequency: Data is updated daily.",
+ "diciBackend": false,
+ "displayType": "table",
+ "downloadCount": 22833,
+ "hideFromCatalog": false,
+ "hideFromDataJson": false,
+ "indexUpdatedAt": 1551996875,
+ "licenseId": "SEE_TERMS_OF_USE",
+ "locked": false,
+ "newBackend": true,
+ "numberOfComments": 0,
+ "oid": 30984853,
+ "provenance": "official",
+ "publicationAppendEnabled": false,
+ "publicationDate": 1551782262,
+ "publicationGroup": 237697,
+ "publicationStage": "published",
+ "resourceName": "_311-potholes",
+ "rowClass": "",
+ "rowsUpdatedAt": 1551782145,
+ "tableId": 16014387,
+ "totalTimesRated": 0,
+ "viewCount": 63543,
+ "viewLastModified": 1774467092,
+ "viewType": "tabular",
+ "approvals": [
+  {
+   "reviewedAt": 1551782262,
+   "reviewedAutomatically": true,
+   "state": "approved",
+   "submissionId": 951512,
+   "submissionObject": "public_audience_request",
+   "submissionOutcome": "change_audience",
+   "submittedAt": 1551782262,
+   "targetAudience": "public",
+   "workflowId": 2226,
+   "submissionDetails": {
+    "permissionType": "READ"
+   },
+   "submissionOutcomeApplication": {
+    "failureCount": 0,
+    "status": "success"
+   },
+   "submitter": {
+    "id": "scy9-9wg4",
+    "displayName": "cocadmin"
+   }
+  }
+ ],
+ "clientContext": {
+  "clientContextVariables": [],
+  "inheritedVariables": {}
+ },
+ "columns": [
+  {
+   "id": 398180179,
+   "name": "CREATION DATE",
+   "dataTypeName": "calendar_date",
+   "fieldName": "creation_date",
+   "position": 1,
+   "renderTypeName": "calendar_date",
+   "tableColumnId": 1489294,
+   "width": 159,
+   "format": {
+    "view": "date",
+    "align": "left",
+    "aggregate": "count"
+   }
+  },
+  {
+   "id": 398180180,
+   "name": "STATUS",
+   "dataTypeName": "text",
+   "fieldName": "status",
+   "position": 2,
+   "renderTypeName": "text",
+   "tableColumnId": 1489295,
+   "width": 122,
+   "format": {}
+  },
+  {
+   "id": 398180181,
+   "name": "COMPLETION DATE",
+   "dataTypeName": "calendar_date",
+   "fieldName": "completion_date",
+   "position": 3,
+   "renderTypeName": "calendar_date",
+   "tableColumnId": 1489296,
+   "width": 172,
+   "format": {
+    "view": "date",
+    "align": "left"
+   }
+  },
+  {
+   "id": 398180182,
+   "name": "SERVICE REQUEST NUMBER",
+   "dataTypeName": "text",
+   "fieldName": "service_request_number",
+   "position": 4,
+   "renderTypeName": "text",
+   "tableColumnId": 1489297,
+   "width": 223,
+   "format": {}
+  },
+  {
+   "id": 398180183,
+   "name": "TYPE OF SERVICE REQUEST",
+   "dataTypeName": "text",
+   "fieldName": "type_of_service_request",
+   "position": 5,
+   "renderTypeName": "text",
+   "tableColumnId": 1489298,
+   "width": 230,
+   "format": {}
+  },
+  {
+   "id": 398180184,
+   "name": "CURRENT ACTIVITY",
+   "dataTypeName": "text",
+   "fieldName": "current_activity",
+   "position": 6,
+   "renderTypeName": "text",
+   "tableColumnId": 1489299,
+   "width": 167,
+   "format": {}
+  },
+  {
+   "id": 398180185,
+   "name": "MOST RECENT ACTION",
+   "dataTypeName": "text",
+   "fieldName": "most_recent_action",
+   "position": 7,
+   "renderTypeName": "text",
+   "tableColumnId": 1489300,
+   "width": 301,
+   "format": {}
+  },
+  {
+   "id": 398180186,
+   "name": "NUMBER OF POTHOLES FILLED ON BLOCK",
+   "dataTypeName": "number",
+   "fieldName": "number_of_potholes_filled_on_block",
+   "position": 8,
+   "renderTypeName": "number",
+   "tableColumnId": 1489301,
+   "width": 320,
+   "format": {
+    "precisionStyle": "standard",
+    "noCommas": "false",
+    "align": "right"
+   }
+  },
+  {
+   "id": 398180187,
+   "name": "STREET ADDRESS",
+   "dataTypeName": "text",
+   "fieldName": "street_address",
+   "position": 9,
+   "renderTypeName": "text",
+   "tableColumnId": 1489302,
+   "width": 268,
+   "format": {}
+  },
+  {
+   "id": 398180188,
+   "name": "ZIP",
+   "dataTypeName": "number",
+   "fieldName": "zip",
+   "position": 10,
+   "renderTypeName": "number",
+   "tableColumnId": 1489303,
+   "width": 75,
+   "format": {
+    "precisionStyle": "standard",
+    "noCommas": "true",
+    "align": "right"
+   }
+  },
+  {
+   "id": 398180189,
+   "name": "X COORDINATE",
+   "dataTypeName": "number",
+   "fieldName": "x_coordinate",
+   "position": 11,
+   "renderTypeName": "number",
+   "tableColumnId": 1489304,
+   "width": 153,
+   "format": {
+    "precisionStyle": "standard",
+    "noCommas": "true",
+    "align": "right"
+   }
+  },
+  {
+   "id": 398180190,
+   "name": "Y COORDINATE",
+   "dataTypeName": "number",
+   "fieldName": "y_coordinate",
+   "position": 12,
+   "renderTypeName": "number",
+   "tableColumnId": 1489305,
+   "width": 151,
+   "format": {
+    "precisionStyle": "standard",
+    "noCommas": "true",
+    "align": "right"
+   }
+  },
+  {
+   "id": 398180191,
+   "name": "Ward",
+   "dataTypeName": "number",
+   "fieldName": "ward",
+   "position": 13,
+   "renderTypeName": "number",
+   "tableColumnId": 3808368,
+   "width": 100,
+   "format": {}
+  },
+  {
+   "id": 398180192,
+   "name": "Police District",
+   "dataTypeName": "number",
+   "fieldName": "police_district",
+   "position": 14,
+   "renderTypeName": "number",
+   "tableColumnId": 3808384,
+   "width": 100,
+   "format": {}
+  },
+  {
+   "id": 398180193,
+   "name": "Community Area",
+   "dataTypeName": "number",
+   "fieldName": "community_area",
+   "position": 15,
+   "renderTypeName": "number",
+   "tableColumnId": 3808385,
+   "width": 100,
+   "format": {}
+  },
+  {
+   "id": 398180194,
+   "name": "SSA",
+   "dataTypeName": "text",
+   "description": "Special Service Areas are local tax districts that fund expanded services and programs, to foster commercial and economic development, through a localized property tax. In other cities these areas are sometimes called Business Improvement Districts (BIDs). This portal contains a map of all Chicago SSAs",
+   "fieldName": "ssa",
+   "position": 16,
+   "renderTypeName": "text",
+   "tableColumnId": 18334210,
+   "width": 100,
+   "format": {}
+  },
+  {
+   "id": 398180195,
+   "name": "LATITUDE",
+   "dataTypeName": "number",
+   "fieldName": "latitude",
+   "position": 17,
+   "renderTypeName": "number",
+   "tableColumnId": 1498142,
+   "width": 100,
+   "format": {}
+  },
+  {
+   "id": 398180196,
+   "name": "LONGITUDE",
+   "dataTypeName": "number",
+   "fieldName": "longitude",
+   "position": 18,
+   "renderTypeName": "number",
+   "tableColumnId": 1498143,
+   "width": 112,
+   "format": {}
+  },
+  {
+   "id": 398180197,
+   "name": "LOCATION",
+   "dataTypeName": "location",
+   "fieldName": "location",
+   "position": 19,
+   "renderTypeName": "location",
+   "tableColumnId": 1498144,
+   "width": 109,
+   "format": {}
+  },
+  {
+   "id": 203620846,
+   "name": "Historical Wards 2003-2015",
+   "dataTypeName": "number",
+   "fieldName": ":@computed_region_awaf_s7ux",
+   "position": 24,
+   "renderTypeName": "number",
+   "tableColumnId": 27780395,
+   "computationStrategy": {
+    "source_columns": [
+     "location"
+    ],
+    "type": "georegion_match_on_point",
+    "parameters": {
+     "region": "_awaf-s7ux",
+     "primary_key": "_feature_id"
+    }
+   },
+   "format": {}
+  },
+  {
+   "id": 203620847,
+   "name": "Zip Codes",
+   "dataTypeName": "number",
+   "fieldName": ":@computed_region_6mkv_f3dw",
+   "position": 25,
+   "renderTypeName": "number",
+   "tableColumnId": 27780396,
+   "computationStrategy": {
+    "source_columns": [
+     "location"
+    ],
+    "type": "georegion_match_on_point",
+    "parameters": {
+     "region": "_6mkv-f3dw",
+     "primary_key": "_feature_id"
+    }
+   },
+   "format": {}
+  },
+  {
+   "id": 203620848,
+   "name": "Community Areas",
+   "dataTypeName": "number",
+   "fieldName": ":@computed_region_vrxf_vc4k",
+   "position": 26,
+   "renderTypeName": "number",
+   "tableColumnId": 27780397,
+   "computationStrategy": {
+    "source_columns": [
+     "location"
+    ],
+    "type": "georegion_match_on_point",
+    "parameters": {
+     "region": "_vrxf-vc4k",
+     "primary_key": "_feature_id"
+    }
+   },
+   "format": {}
+  },
+  {
+   "id": 203620849,
+   "name": "Census Tracts",
+   "dataTypeName": "number",
+   "fieldName": ":@computed_region_bdys_3d7i",
+   "position": 27,
+   "renderTypeName": "number",
+   "tableColumnId": 27780398,
+   "computationStrategy": {
+    "source_columns": [
+     "location"
+    ],
+    "type": "georegion_match_on_point",
+    "parameters": {
+     "region": "_bdys-3d7i",
+     "primary_key": "_feature_id"
+    }
+   },
+   "format": {}
+  },
+  {
+   "id": 203620850,
+   "name": "Wards",
+   "dataTypeName": "number",
+   "description": "",
+   "fieldName": ":@computed_region_43wa_7qmu",
+   "position": 28,
+   "renderTypeName": "number",
+   "tableColumnId": 28243105,
+   "computationStrategy": {
+    "source_columns": [
+     "location"
+    ],
+    "type": "georegion_match_on_point",
+    "parameters": {
+     "region": "_43wa-7qmu",
+     "primary_key": "_feature_id"
+    }
+   },
+   "format": {}
+  }
+ ],
+ "grants": [
+  {
+   "inherited": false,
+   "type": "viewer",
+   "flags": [
+    "public"
+   ]
+  }
+ ],
+ "license": {
+  "name": "See Terms of Use"
+ },
+ "metadata": {
+  "rdfSubject": "0",
+  "rdfClass": "",
+  "jsonQuery": {
+   "order": [
+    {
+     "columnFieldName": "creation_date",
+     "ascending": false
+    }
+   ]
+  },
+  "custom_fields": {
+   "Metadata": {
+    "Time Period": "All open requests and all completed requests January 1, 2011 - December 18, 2018",
+    "Changes and Other Historical Information Useful to Understanding This Dataset": "https://www.google.com/search?q=site:data.cityofchicago.org/stories+\"Related+dataset+ID+s\"+\"7as2-ds3y\"",
+    "Data Owner": "Transportation"
+   }
+  },
+  "rowLabel": "Service Request",
+  "availableDisplayTypes": [
+   "table",
+   "fatrow",
+   "page"
+  ],
+  "renderTypeConfig": {
+   "visible": {
+    "table": true
+   }
+  }
+ },
+ "owner": {
+  "id": "scy9-9wg4",
+  "displayName": "cocadmin",
+  "profileImageUrlLarge": "/api/users/scy9-9wg4/profile_images/LARGE",
+  "profileImageUrlMedium": "/api/users/scy9-9wg4/profile_images/THUMB",
+  "profileImageUrlSmall": "/api/users/scy9-9wg4/profile_images/TINY",
+  "screenName": "cocadmin",
+  "type": "interactive",
+  "flags": [
+   "acceptedEula",
+   "mayBeStoriesCoOwner"
+  ]
+ },
+ "query": {
+  "orderBys": [
+   {
+    "ascending": false,
+    "expression": {
+     "columnId": 398180179,
+     "type": "column"
+    }
+   }
+  ]
+ },
+ "rights": [
+  "read"
+ ],
+ "tableAuthor": {
+  "id": "scy9-9wg4",
+  "displayName": "cocadmin",
+  "profileImageUrlLarge": "/api/users/scy9-9wg4/profile_images/LARGE",
+  "profileImageUrlMedium": "/api/users/scy9-9wg4/profile_images/THUMB",
+  "profileImageUrlSmall": "/api/users/scy9-9wg4/profile_images/TINY",
+  "screenName": "cocadmin",
+  "type": "interactive",
+  "flags": [
+   "acceptedEula",
+   "mayBeStoriesCoOwner"
+  ]
+ },
+ "tags": [
+  "streets",
+  "pot holes",
+  "historical",
+  "service requests",
+  "311"
+ ],
+ "flags": [
+  "default",
+  "ownerMayBeContacted",
+  "restorable",
+  "restorePossibleForType"
+ ]
+}

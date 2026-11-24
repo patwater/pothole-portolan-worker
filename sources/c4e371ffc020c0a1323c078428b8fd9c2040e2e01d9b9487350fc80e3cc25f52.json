@@ -1,0 +1,761 @@
+{
+ "id": "v6vf-nfxy",
+ "name": "311 Service Requests",
+ "assetType": "dataset",
+ "attribution": "City of Chicago",
+ "attributionLink": "https://chicago.gov",
+ "averageRating": 0,
+ "category": "Service Requests",
+ "createdAt": 1544730272,
+ "description": "311 Service Requests received by the City of Chicago. This dataset includes requests created after the launch of the new 311 system on 12/18/2018 and some records from the previous system, indicated in the LEGACY_RECORD column.\r\n\r\nFor purposes of all columns indicating geographic areas or locations, please note that requests of the type 311 INFORMATION ONLY CALL often are entered with the address of the City's 311 Center.",
+ "diciBackend": false,
+ "displayType": "table",
+ "downloadCount": 28335,
+ "hideFromCatalog": false,
+ "hideFromDataJson": false,
+ "licenseId": "SEE_TERMS_OF_USE",
+ "locked": false,
+ "newBackend": true,
+ "numberOfComments": 0,
+ "oid": 39887326,
+ "provenance": "official",
+ "publicationAppendEnabled": false,
+ "publicationDate": 1692313146,
+ "publicationGroup": 15766049,
+ "publicationStage": "published",
+ "rowClass": "",
+ "rowIdentifierColumnId": 579895143,
+ "rowsUpdatedAt": 1795496300,
+ "rowsUpdatedBy": "n9j5-zhen",
+ "tableId": 19260884,
+ "totalTimesRated": 0,
+ "viewCount": 129962,
+ "viewLastModified": 1781560104,
+ "viewType": "tabular",
+ "approvals": [
+  {
+   "reviewedAt": 1551901718,
+   "reviewedAutomatically": true,
+   "state": "approved",
+   "submissionId": 5709514,
+   "submissionObject": "public_audience_request",
+   "submissionOutcome": "change_audience",
+   "submittedAt": 1551901718,
+   "targetAudience": "public",
+   "workflowId": 2226,
+   "submissionDetails": {
+    "permissionType": "READ"
+   },
+   "submissionOutcomeApplication": {
+    "failureCount": 0,
+    "status": "success"
+   },
+   "submitter": {
+    "id": "vewm-vupz",
+    "displayName": "Jonathan Levy"
+   }
+  }
+ ],
+ "clientContext": {
+  "clientContextVariables": [],
+  "inheritedVariables": {}
+ },
+ "columns": [
+  {
+   "id": 579895143,
+   "name": "SR_NUMBER",
+   "dataTypeName": "text",
+   "description": "",
+   "fieldName": "sr_number",
+   "position": 1,
+   "renderTypeName": "text",
+   "tableColumnId": 74446370,
+   "width": 190,
+   "format": {}
+  },
+  {
+   "id": 579895144,
+   "name": "SR_TYPE",
+   "dataTypeName": "text",
+   "description": "",
+   "fieldName": "sr_type",
+   "position": 2,
+   "renderTypeName": "text",
+   "tableColumnId": 74446377,
+   "width": 260,
+   "format": {}
+  },
+  {
+   "id": 579895145,
+   "name": "SR_SHORT_CODE",
+   "dataTypeName": "text",
+   "description": "An internal code corresponding to the Service Request Type. This code allows for searching and filtering more easily than using the full SR_TYPE value.",
+   "fieldName": "sr_short_code",
+   "position": 3,
+   "renderTypeName": "text",
+   "tableColumnId": 74486890,
+   "width": 190,
+   "format": {}
+  },
+  {
+   "id": 579895146,
+   "name": "CREATED_DEPARTMENT",
+   "dataTypeName": "text",
+   "description": "The department, if any, that created the service request.",
+   "fieldName": "created_department",
+   "position": 4,
+   "renderTypeName": "text",
+   "tableColumnId": 144231045,
+   "width": 270,
+   "format": {}
+  },
+  {
+   "id": 579895147,
+   "name": "OWNER_DEPARTMENT",
+   "dataTypeName": "text",
+   "description": "The department with initial responsibility for the service request.",
+   "fieldName": "owner_department",
+   "position": 5,
+   "renderTypeName": "text",
+   "tableColumnId": 74446374,
+   "width": 299,
+   "format": {}
+  },
+  {
+   "id": 579895148,
+   "name": "STATUS",
+   "dataTypeName": "text",
+   "description": "",
+   "fieldName": "status",
+   "position": 6,
+   "renderTypeName": "text",
+   "tableColumnId": 74446372,
+   "width": 190,
+   "format": {}
+  },
+  {
+   "id": 579895149,
+   "name": "ORIGIN",
+   "dataTypeName": "text",
+   "description": "How the request was opened. Some values, such as Generated In House and Mass Entry result from the City's own operations.",
+   "fieldName": "origin",
+   "position": 7,
+   "renderTypeName": "text",
+   "tableColumnId": 74446351,
+   "width": 190,
+   "format": {}
+  },
+  {
+   "id": 579895150,
+   "name": "CREATED_DATE",
+   "dataTypeName": "calendar_date",
+   "description": "",
+   "fieldName": "created_date",
+   "position": 8,
+   "renderTypeName": "calendar_date",
+   "tableColumnId": 74446381,
+   "width": 190,
+   "format": {
+    "view": "date_time"
+   }
+  },
+  {
+   "id": 579895151,
+   "name": "LAST_MODIFIED_DATE",
+   "dataTypeName": "calendar_date",
+   "description": "",
+   "fieldName": "last_modified_date",
+   "position": 9,
+   "renderTypeName": "calendar_date",
+   "tableColumnId": 74446338,
+   "width": 222,
+   "format": {
+    "view": "date_time"
+   }
+  },
+  {
+   "id": 579895152,
+   "name": "CLOSED_DATE",
+   "dataTypeName": "calendar_date",
+   "description": "",
+   "fieldName": "closed_date",
+   "position": 10,
+   "renderTypeName": "calendar_date",
+   "tableColumnId": 74446341,
+   "width": 190,
+   "format": {
+    "view": "date_time"
+   }
+  },
+  {
+   "id": 579895153,
+   "name": "STREET_ADDRESS",
+   "dataTypeName": "text",
+   "description": "",
+   "fieldName": "street_address",
+   "position": 11,
+   "renderTypeName": "text",
+   "tableColumnId": 74446335,
+   "width": 315,
+   "format": {}
+  },
+  {
+   "id": 579895154,
+   "name": "CITY",
+   "dataTypeName": "text",
+   "description": "",
+   "fieldName": "city",
+   "position": 12,
+   "renderTypeName": "text",
+   "tableColumnId": 74446353,
+   "width": 190,
+   "format": {}
+  },
+  {
+   "id": 579895155,
+   "name": "STATE",
+   "dataTypeName": "text",
+   "description": "",
+   "fieldName": "state",
+   "position": 13,
+   "renderTypeName": "text",
+   "tableColumnId": 74446369,
+   "width": 190,
+   "format": {}
+  },
+  {
+   "id": 579895156,
+   "name": "ZIP_CODE",
+   "dataTypeName": "text",
+   "description": "",
+   "fieldName": "zip_code",
+   "position": 14,
+   "renderTypeName": "text",
+   "tableColumnId": 74487069,
+   "format": {}
+  },
+  {
+   "id": 579895157,
+   "name": "STREET_NUMBER",
+   "dataTypeName": "text",
+   "description": "",
+   "fieldName": "street_number",
+   "position": 15,
+   "renderTypeName": "text",
+   "tableColumnId": 74446336,
+   "width": 190,
+   "format": {}
+  },
+  {
+   "id": 579895158,
+   "name": "STREET_DIRECTION",
+   "dataTypeName": "text",
+   "description": "",
+   "fieldName": "street_direction",
+   "position": 16,
+   "renderTypeName": "text",
+   "tableColumnId": 74446383,
+   "width": 228,
+   "format": {}
+  },
+  {
+   "id": 579895159,
+   "name": "STREET_NAME",
+   "dataTypeName": "text",
+   "description": "",
+   "fieldName": "street_name",
+   "position": 17,
+   "renderTypeName": "text",
+   "tableColumnId": 74446348,
+   "format": {}
+  },
+  {
+   "id": 579895160,
+   "name": "STREET_TYPE",
+   "dataTypeName": "text",
+   "description": "",
+   "fieldName": "street_type",
+   "position": 18,
+   "renderTypeName": "text",
+   "tableColumnId": 74446340,
+   "width": 190,
+   "format": {}
+  },
+  {
+   "id": 579895161,
+   "name": "DUPLICATE",
+   "dataTypeName": "checkbox",
+   "description": "Is this request a duplicate of another request?",
+   "fieldName": "duplicate",
+   "position": 19,
+   "renderTypeName": "checkbox",
+   "tableColumnId": 74480213,
+   "width": 190,
+   "format": {}
+  },
+  {
+   "id": 579895162,
+   "name": "LEGACY_RECORD",
+   "dataTypeName": "checkbox",
+   "description": "Did this request originate in the previous 311 system?",
+   "fieldName": "legacy_record",
+   "position": 20,
+   "renderTypeName": "checkbox",
+   "tableColumnId": 74446354,
+   "width": 190,
+   "format": {}
+  },
+  {
+   "id": 579895163,
+   "name": "LEGACY_SR_NUMBER",
+   "dataTypeName": "text",
+   "description": "If this request originated in the previous 311 system, the original Service Request Number.",
+   "fieldName": "legacy_sr_number",
+   "position": 21,
+   "renderTypeName": "text",
+   "tableColumnId": 74446368,
+   "width": 221,
+   "format": {}
+  },
+  {
+   "id": 579895164,
+   "name": "PARENT_SR_NUMBER",
+   "dataTypeName": "text",
+   "description": "Parent Service Request of the record if applicable. If the current Service Request record has been identified as a duplicate request, the record will be created as a child of the original request.",
+   "fieldName": "parent_sr_number",
+   "position": 22,
+   "renderTypeName": "text",
+   "tableColumnId": 74446382,
+   "format": {}
+  },
+  {
+   "id": 579895165,
+   "name": "COMMUNITY_AREA",
+   "dataTypeName": "number",
+   "description": "",
+   "fieldName": "community_area",
+   "position": 23,
+   "renderTypeName": "number",
+   "tableColumnId": 74446375,
+   "width": 295,
+   "format": {}
+  },
+  {
+   "id": 579895166,
+   "name": "WARD",
+   "dataTypeName": "number",
+   "description": "",
+   "fieldName": "ward",
+   "position": 24,
+   "renderTypeName": "number",
+   "tableColumnId": 75497818,
+   "width": 190,
+   "format": {
+    "precisionStyle": "standard",
+    "noCommas": "true",
+    "precision": "0"
+   }
+  },
+  {
+   "id": 579895167,
+   "name": "ELECTRICAL_DISTRICT",
+   "dataTypeName": "text",
+   "description": "",
+   "fieldName": "electrical_district",
+   "position": 25,
+   "renderTypeName": "text",
+   "tableColumnId": 74446342,
+   "width": 232,
+   "format": {}
+  },
+  {
+   "id": 579895168,
+   "name": "ELECTRICITY_GRID",
+   "dataTypeName": "text",
+   "description": "",
+   "fieldName": "electricity_grid",
+   "position": 26,
+   "renderTypeName": "text",
+   "tableColumnId": 74446343,
+   "width": 211,
+   "format": {}
+  },
+  {
+   "id": 579895169,
+   "name": "POLICE_SECTOR",
+   "dataTypeName": "text",
+   "description": "",
+   "fieldName": "police_sector",
+   "position": 27,
+   "renderTypeName": "text",
+   "tableColumnId": 74446345,
+   "width": 218,
+   "format": {}
+  },
+  {
+   "id": 579895170,
+   "name": "POLICE_DISTRICT",
+   "dataTypeName": "text",
+   "description": "",
+   "fieldName": "police_district",
+   "position": 28,
+   "renderTypeName": "text",
+   "tableColumnId": 74446376,
+   "width": 214,
+   "format": {}
+  },
+  {
+   "id": 579895171,
+   "name": "POLICE_BEAT",
+   "dataTypeName": "text",
+   "description": "",
+   "fieldName": "police_beat",
+   "position": 29,
+   "renderTypeName": "text",
+   "tableColumnId": 74446346,
+   "width": 204,
+   "format": {}
+  },
+  {
+   "id": 579895172,
+   "name": "PRECINCT",
+   "dataTypeName": "text",
+   "description": "",
+   "fieldName": "precinct",
+   "position": 30,
+   "renderTypeName": "text",
+   "tableColumnId": 74446347,
+   "width": 190,
+   "format": {}
+  },
+  {
+   "id": 579895173,
+   "name": "SANITATION_DIVISION_DAYS",
+   "dataTypeName": "text",
+   "description": "",
+   "fieldName": "sanitation_division_days",
+   "position": 31,
+   "renderTypeName": "text",
+   "tableColumnId": 74446349,
+   "width": 266,
+   "format": {}
+  },
+  {
+   "id": 579895174,
+   "name": "CREATED_HOUR",
+   "dataTypeName": "number",
+   "description": "The hour of the day component of CREATED_DATE.",
+   "fieldName": "created_hour",
+   "position": 32,
+   "renderTypeName": "number",
+   "tableColumnId": 77093276,
+   "width": 190,
+   "format": {
+    "precision": "0"
+   }
+  },
+  {
+   "id": 579895175,
+   "name": "CREATED_DAY_OF_WEEK",
+   "dataTypeName": "number",
+   "description": "The day of the week component of CREATED_DATE. Sunday=1",
+   "fieldName": "created_day_of_week",
+   "position": 33,
+   "renderTypeName": "number",
+   "tableColumnId": 77104211,
+   "width": 238,
+   "format": {
+    "precision": "0"
+   }
+  },
+  {
+   "id": 579895176,
+   "name": "CREATED_MONTH",
+   "dataTypeName": "number",
+   "description": "The month component of CREATED_DATE",
+   "fieldName": "created_month",
+   "position": 34,
+   "renderTypeName": "number",
+   "tableColumnId": 77104210,
+   "width": 205,
+   "format": {
+    "precision": "0"
+   }
+  },
+  {
+   "id": 579895177,
+   "name": "X_COORDINATE",
+   "dataTypeName": "number",
+   "description": "The x coordinate of the location in State Plane Illinois East NAD 1983 projection.",
+   "fieldName": "x_coordinate",
+   "position": 35,
+   "renderTypeName": "number",
+   "tableColumnId": 74446350,
+   "width": 194,
+   "format": {
+    "noCommas": "true"
+   }
+  },
+  {
+   "id": 579895178,
+   "name": "Y_COORDINATE",
+   "dataTypeName": "number",
+   "description": "The y coordinate of the location in State Plane Illinois East NAD 1983 projection.",
+   "fieldName": "y_coordinate",
+   "position": 36,
+   "renderTypeName": "number",
+   "tableColumnId": 74446339,
+   "width": 222,
+   "format": {
+    "noCommas": "true"
+   }
+  },
+  {
+   "id": 579895179,
+   "name": "LATITUDE",
+   "dataTypeName": "number",
+   "description": "The latitude of the location.",
+   "fieldName": "latitude",
+   "position": 37,
+   "renderTypeName": "number",
+   "tableColumnId": 74446380,
+   "width": 199,
+   "format": {}
+  },
+  {
+   "id": 579895180,
+   "name": "LONGITUDE",
+   "dataTypeName": "number",
+   "description": "The longitude of the location.",
+   "fieldName": "longitude",
+   "position": 38,
+   "renderTypeName": "number",
+   "tableColumnId": 74446378,
+   "width": 190,
+   "format": {}
+  },
+  {
+   "id": 579895181,
+   "name": "LOCATION",
+   "dataTypeName": "location",
+   "description": "The location in a format that allows for creation of maps and other geographic operations on this data portal.",
+   "fieldName": "location",
+   "position": 39,
+   "renderTypeName": "location",
+   "tableColumnId": 74446379,
+   "width": 289,
+   "format": {
+    "view": "coords"
+   }
+  },
+  {
+   "id": 579895186,
+   "name": "Boundaries - ZIP Codes",
+   "dataTypeName": "number",
+   "fieldName": ":@computed_region_rpca_8um6",
+   "position": 43,
+   "renderTypeName": "number",
+   "tableColumnId": 78422769,
+   "computationStrategy": {
+    "source_columns": [
+     "location"
+    ],
+    "type": "georegion_match_on_point",
+    "parameters": {
+     "region": "_rpca-8um6",
+     "primary_key": "_feature_id"
+    }
+   },
+   "format": {}
+  },
+  {
+   "id": 579895187,
+   "name": "Community Areas",
+   "dataTypeName": "number",
+   "fieldName": ":@computed_region_vrxf_vc4k",
+   "position": 44,
+   "renderTypeName": "number",
+   "tableColumnId": 78422770,
+   "computationStrategy": {
+    "source_columns": [
+     "location"
+    ],
+    "type": "georegion_match_on_point",
+    "parameters": {
+     "region": "_vrxf-vc4k",
+     "primary_key": "_feature_id"
+    }
+   },
+   "format": {}
+  },
+  {
+   "id": 579895188,
+   "name": "Zip Codes",
+   "dataTypeName": "number",
+   "fieldName": ":@computed_region_6mkv_f3dw",
+   "position": 45,
+   "renderTypeName": "number",
+   "tableColumnId": 78422771,
+   "computationStrategy": {
+    "source_columns": [
+     "location"
+    ],
+    "type": "georegion_match_on_point",
+    "parameters": {
+     "region": "_6mkv-f3dw",
+     "primary_key": "_feature_id"
+    }
+   },
+   "format": {}
+  },
+  {
+   "id": 579895189,
+   "name": "Census Tracts",
+   "dataTypeName": "number",
+   "fieldName": ":@computed_region_bdys_3d7i",
+   "position": 46,
+   "renderTypeName": "number",
+   "tableColumnId": 78422772,
+   "computationStrategy": {
+    "source_columns": [
+     "location"
+    ],
+    "type": "georegion_match_on_point",
+    "parameters": {
+     "region": "_bdys-3d7i",
+     "primary_key": "_feature_id"
+    }
+   },
+   "format": {}
+  },
+  {
+   "id": 579895190,
+   "name": "Wards",
+   "dataTypeName": "number",
+   "fieldName": ":@computed_region_43wa_7qmu",
+   "position": 47,
+   "renderTypeName": "number",
+   "tableColumnId": 78422773,
+   "computationStrategy": {
+    "source_columns": [
+     "location"
+    ],
+    "type": "georegion_match_on_point",
+    "parameters": {
+     "region": "_43wa-7qmu",
+     "primary_key": "_feature_id"
+    }
+   },
+   "format": {}
+  },
+  {
+   "id": 579895195,
+   "name": "Boundaries - Wards (2023-)",
+   "dataTypeName": "number",
+   "description": "This column was automatically created in order to record in what polygon from the dataset 'Boundaries - Wards (2023-)' (du4m-ji7t) the point in column 'location' is located.  This enables the creation of region maps (choropleths) in the visualization canvas and data lens.",
+   "fieldName": ":@computed_region_du4m_ji7t",
+   "position": 48,
+   "renderTypeName": "number",
+   "tableColumnId": 148068427,
+   "computationStrategy": {
+    "source_columns": [
+     "location"
+    ],
+    "type": "georegion_match_on_point",
+    "parameters": {
+     "region": "_du4m-ji7t",
+     "primary_key": "_feature_id"
+    }
+   },
+   "format": {}
+  }
+ ],
+ "grants": [
+  {
+   "inherited": false,
+   "type": "viewer",
+   "flags": [
+    "public"
+   ]
+  }
+ ],
+ "license": {
+  "name": "See Terms of Use"
+ },
+ "metadata": {
+  "rdfSubject": "0",
+  "rdfClass": "",
+  "jsonQuery": {
+   "order": [
+    {
+     "columnFieldName": "sr_number",
+     "ascending": false
+    }
+   ]
+  },
+  "custom_fields": {
+   "Metadata": {
+    "Time Period": "12/18/2018 to present, plus some records ",
+    "Changes and Other Historical Information Useful to Understanding This Dataset": "https://www.google.com/search?q=site:data.cityofchicago.org/stories+\"Related+dataset+ID+s\"+\"v6vf-nfxy\"",
+    "Frequency": "Data are updated multiple times per day",
+    "Data Owner": "City of Chicago"
+   }
+  },
+  "rowIdentifier": 579895143,
+  "rowLabel": "Service Request",
+  "availableDisplayTypes": [
+   "table",
+   "fatrow",
+   "page"
+  ],
+  "renderTypeConfig": {
+   "visible": {
+    "table": true
+   }
+  }
+ },
+ "owner": {
+  "id": "vewm-vupz",
+  "displayName": "Jonathan Levy",
+  "screenName": "Jonathan Levy",
+  "type": "interactive",
+  "flags": [
+   "acceptedEula",
+   "mayBeStoriesCoOwner"
+  ]
+ },
+ "query": {
+  "orderBys": [
+   {
+    "ascending": false,
+    "expression": {
+     "columnId": 579895143,
+     "type": "column"
+    }
+   }
+  ]
+ },
+ "rights": [
+  "read"
+ ],
+ "tableAuthor": {
+  "id": "vewm-vupz",
+  "displayName": "Jonathan Levy",
+  "screenName": "Jonathan Levy",
+  "type": "interactive",
+  "flags": [
+   "acceptedEula",
+   "mayBeStoriesCoOwner"
+  ]
+ },
+ "tags": [
+  "service requests",
+  "311"
+ ],
+ "flags": [
+  "default",
+  "ownerMayBeContacted",
+  "restorable",
+  "restorePossibleForType"
+ ]
+}

@@ -1,71 +1,124 @@
-# Discover, 2026-11-24. All entries are leads found by search or a metadata read; none is archived.
+# Maintained by scripts/fetch_source.py (Fetch) from Discover's list. Status values:
+# listed (not yet fetched), fetched (archived under sources/), unavailable (reason in notes).
 - id: chi-311-service-requests
   name: 311 Service Requests (current feed, dataset v6vf-nfxy)
   publisher: City of Chicago
   source_type: open_data_portal
   url: https://data.cityofchicago.org/api/views/v6vf-nfxy.json
-  status: listed
-  notes: 'Record-level 311 data. Metadata read in Discover says coverage is 12/18/2018 to present plus some records, with legacy records flagged in LEGACY_RECORD; earliest CREATED_DATE 2018-07-01. A pothole type SR_TYPE "Pothole in Street Complaint" (code PHF) was seen in the portal summary. The type label and its history are unverified. Aggregate-only fetch (grouped counts); never archive rows. Kind: reported_demand.'
+  status: fetched
+  notes: 'Record-level 311 data. Metadata read in Discover says coverage is 12/18/2018 to present plus
+    some records, with legacy records flagged in LEGACY_RECORD; earliest CREATED_DATE 2018-07-01. A pothole
+    type SR_TYPE "Pothole in Street Complaint" (code PHF) was seen in the portal summary. The type label
+    and its history are unverified. Aggregate-only fetch (grouped counts); never archive rows. Kind: reported_demand.
+    Fetch 2026-11-24: HTTP 200, application/json, 17848 bytes. Archived copy is reduced: the per-column
+    value samples (cachedContents: top values, smallest, largest) were removed because they embed sample
+    record values (rule 7).'
+  retrieved: '2026-11-24'
+  archive: sources/c4e371ffc020c0a1323c078428b8fd9c2040e2e01d9b9487350fc80e3cc25f52.json
+  robots_checked: true
 - id: chi-311-pot-holes-historical
   name: 311 Service Requests - Pot Holes Reported - Historical (dataset 7as2-ds3y)
   publisher: City of Chicago
   source_type: open_data_portal
   url: https://data.cityofchicago.org/api/views/7as2-ds3y.json
-  status: listed
-  notes: 'Search results say it covers requests since 2011-01-01 and is listed as updated daily, but a data.gov harvest record says a 2018 311 system change moved this function to another dataset (probably v6vf-nfxy). Fetch must read its metadata for the true end date. Catalog page: https://catalog.data.gov/dataset/311-service-requests-pot-holes-reported-historical. The listing says a request may be marked Completed when no pothole is found and one call can cause several repairs, which belong in caveats. Aggregate-only fetch. Kind: reported_demand.'
+  status: fetched
+  notes: 'Search results say it covers requests since 2011-01-01 and is listed as updated daily, but a
+    data.gov harvest record says a 2018 311 system change moved this function to another dataset (probably
+    v6vf-nfxy). Fetch must read its metadata for the true end date. Catalog page: https://catalog.data.gov/dataset/311-service-requests-pot-holes-reported-historical.
+    The listing says a request may be marked Completed when no pothole is found and one call can cause
+    several repairs, which belong in caveats. Aggregate-only fetch. Kind: reported_demand. Fetch 2026-11-24:
+    HTTP 200, application/json, 12989 bytes. Archived copy is reduced: the per-column value samples (cachedContents:
+    top values, smallest, largest) were removed because they embed sample record values (rule 7).'
+  retrieved: '2026-11-24'
+  archive: sources/ea9409c00cb76417e3cc80c2a529f4a23098355904e1a72bdd40862ed4d1b4be.json
+  robots_checked: true
 - id: chi-perf-metrics-pothole-repair
   name: Performance Metrics - Transportation - Pothole Repair (dataset sbt5-2ec8)
   publisher: City of Chicago
   source_type: open_data_portal
   url: https://catalog.data.gov/dataset/performance-metrics-transportation-pothole-repair
-  status: listed
-  notes: 'Search results say it tracks average days to complete repairs against a 7-day target and was last modified in 2014, so it is probably historical only. Its id is not registered in scripts/fetch_source.py. Fetch should read the catalog page only unless the portal page confirms it is aggregate data.'
+  status: fetched
+  notes: 'Search results say it tracks average days to complete repairs against a 7-day target and was
+    last modified in 2014, so it is probably historical only. Its id is not registered in scripts/fetch_source.py.
+    Fetch should read the catalog page only unless the portal page confirms it is aggregate data. Fetch
+    2026-11-24: HTTP 200, text/html, 140528 bytes.'
+  retrieved: '2026-11-24'
+  archive: sources/a36c521795f4356218c8ec4aa64070c4a0d2d85807cc3f293b0be81c690a2580.html
+  robots_checked: true
 - id: chi-cdot-report-pothole
   name: CDOT Pothole in the Street service page
   publisher: Chicago Department of Transportation
   source_type: agency_page
   url: https://chicago.gov/city/en/depts/cdot/provdrs/street/svcs/report_a_pot_holeinstreet.html
-  status: listed
-  notes: 'Describes how residents report potholes and the stated service target. Content unread. May also support the definition of the request type.'
+  status: fetched
+  notes: 'Describes how residents report potholes and the stated service target. Content unread. May also
+    support the definition of the request type. Fetch 2026-11-24: HTTP 200, text/html, 49285 bytes, final
+    URL https://www.chicago.gov/city/en/depts/cdot/provdrs/street/svcs/report_a_pot_holeinstreet.html.'
+  retrieved: '2026-11-24'
+  archive: sources/d4f4ce800b8b0fb2fe61cad7d5ae837431080fb928919e7e6b7ecc1048b94bd9.html
+  robots_checked: true
 - id: chi-oig-pavement-management-audit-2015
   name: Inspector General audit of the CDOT pavement management program (December 2015)
   publisher: City of Chicago Office of Inspector General
   source_type: audit
   url: https://devigchicago.igchicago.org/wp-content/uploads/2023/08/CDOT-Pavement-Management-Audit.pdf
-  status: listed
-  notes: 'Per search summary, says CDOT ran PCI surveys of arterial streets in 2007 and 2014 and never surveyed residential streets, and found data collection and performance measurement deficient. Unread, so none of this is verified. Likely the main condition-method source. Summary page: https://igchicago.org/2015/12/22/audit-of-cdot-pavement-management-program/. The host is a "dev" subdomain, so Fetch should prefer an igchicago.org copy if one exists.'
+  status: unavailable
+  notes: 'Per search summary, says CDOT ran PCI surveys of arterial streets in 2007 and 2014 and never
+    surveyed residential streets, and found data collection and performance measurement deficient. Unread,
+    so none of this is verified. Likely the main condition-method source. Summary page: https://igchicago.org/2015/12/22/audit-of-cdot-pavement-management-program/.
+    The host is a "dev" subdomain, so Fetch should prefer an igchicago.org copy if one exists. Fetch 2026-11-24:
+    not retrieved, robots.txt returned HTTP 403.'
+  retrieved: '2026-11-24'
 - id: chi-oig-pavement-management-followup-2017
   name: CDOT Pavement Management Audit Follow Up (December 2017)
   publisher: City of Chicago Office of Inspector General
   source_type: audit
   url: https://devigchicago.igchicago.org/wp-content/uploads/2023/08/CDOT-Pavement-Management-Audit-Follow-Up.pdf
-  status: listed
-  notes: 'Per search summary, says a planned 2017 arterial rating was not carried out. Unread. Needed to say whether a newer survey than 2014 exists.'
+  status: unavailable
+  notes: 'Per search summary, says a planned 2017 arterial rating was not carried out. Unread. Needed
+    to say whether a newer survey than 2014 exists. Fetch 2026-11-24: not retrieved, robots.txt returned
+    HTTP 403.'
+  retrieved: '2026-11-24'
 - id: chi-oig-service-requests-audit-2014
   name: Inspector General audit of CDOT service request performance reporting
   publisher: City of Chicago Office of Inspector General
   source_type: audit
   url: https://igchicago.org/wp-content/uploads/2023/08/CDOT-Serv-Reqs-Performance-Reporting-Audit.pdf
-  status: listed
-  notes: 'Per search summary, reviews 2010 to 2012 repair data for five services, found pothole repair targets missed and public reporting inaccurate. Unread. Potential response_time source for that period only.'
+  status: unavailable
+  notes: 'Per search summary, reviews 2010 to 2012 repair data for five services, found pothole repair
+    targets missed and public reporting inaccurate. Unread. Potential response_time source for that period
+    only. Fetch 2026-11-24: not retrieved, robots.txt returned HTTP 403.'
+  retrieved: '2026-11-24'
 - id: chi-cdot-stp-program-2026
   name: Chicago 2026-2031 Surface Transportation Program (STP) list, dated 2026-06-23
   publisher: Chicago Metropolitan Agency for Planning (CMAP) with CDOT
   source_type: council_document
   url: https://cmap.illinois.gov/wp-content/uploads/Chicago_2026-2031-STP-Program-20260623.pdf
-  status: listed
-  notes: 'Found in a budget search. Unread; it may only list federal-aid projects and may be of little use. Low priority.'
+  status: fetched
+  notes: 'Found in a budget search. Unread; it may only list federal-aid projects and may be of little
+    use. Low priority. Fetch 2026-11-24: HTTP 200, application/pdf, 433804 bytes.'
+  retrieved: '2026-11-24'
+  archive: sources/5bd8ec200df6c391b07aed2fe83e602d6d3e187d0d7c0f5c3e7c9aa6ca227748.pdf
+  robots_checked: true
 - id: chi-obm-cip-neighborhood-infrastructure
   name: Capital Improvement Program, Neighborhood Infrastructure Summary
   publisher: City of Chicago Office of Budget and Management
   source_type: budget
   url: https://www.chicago.gov/content/dam/city/depts/obm/general/CIP/CIPDocs/Neighborhood%20Infrastructure%20Summary.pdf
-  status: listed
-  notes: 'Found in a budget search. Unread. Possible source for resurfacing programs and spending. Whether it separates street resurfacing is unknown. Year not confirmed.'
+  status: unavailable
+  notes: 'Found in a budget search. Unread. Possible source for resurfacing programs and spending. Whether
+    it separates street resurfacing is unknown. Year not confirmed. Fetch 2026-11-24: HTTP 403 Forbidden.'
+  retrieved: '2026-11-24'
 - id: chi-bga-cdot-2026-budget-snapshot
   name: BGA policy snapshot of the CDOT 2026 budget
   publisher: Better Government Association
   source_type: other
   url: https://www.bettergov.org/2025/10/21/chicago-department-of-transportation-bga-policy-2026-budget-snapshot/
-  status: listed
-  notes: 'Secondary analysis, not an official source; use only as a pointer to the official 2026 budget documents and recommendations, and cite the official book for any figure. The official budget book URL was not found in this run and is still needed (Streets and CDOT appropriations, resurfacing and pothole measures).'
+  status: fetched
+  notes: 'Secondary analysis, not an official source; use only as a pointer to the official 2026 budget
+    documents and recommendations, and cite the official book for any figure. The official budget book
+    URL was not found in this run and is still needed (Streets and CDOT appropriations, resurfacing and
+    pothole measures). Fetch 2026-11-24: HTTP 200, text/html, 293893 bytes.'
+  retrieved: '2026-11-24'
+  archive: sources/1fa1086fffd1e1a73112004fbd37d65152bf4192029ec4a41bfb89c6f82bc833.html
+  robots_checked: true
