@@ -1,6 +1,6 @@
-stage: proposed
+stage: scouted
 blocked_on: null
 last_run:
   behavior: scout
   date: '2026-11-24'
-  workflow_run: '45339736756'
+  workflow_run: '45340105700'
