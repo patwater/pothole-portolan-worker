@@ -127,6 +127,8 @@ Choices made in the merge, so they can be revisited:
 - The Scorecard Measures dataset (`kc49-udxn`) may be read as rows, because it holds department performance figures and not records about people. Every other registered dataset is aggregate-only.
 - `check_personal_data` treats a dataset description as safe unless it still contains `cachedContents`, and re-applies the group-size and typed-text guards to archived responses from registered datasets.
 
+**Chicago (added 2026-11-24).** `data.cityofchicago.org` is aggregate-only too, with its 311 Service Requests (`v6vf-nfxy`) and the historical 311 Pot Holes Reported (`7as2-ds3y`) registered as grouped counts only, and Chicago's address, coordinate and request-number columns added to the sensitive fields. The dataset ids and column names were registered before Discover ran for Chicago; if Discover finds different ids, those are refused until registered, which is the safe way to be wrong. Tests: `tests/test_fetch_chicago.py`.
+
 Known limits:
 
 - Hosts outside `AGGREGATE_ONLY_HOSTS` get neither guard, only robots.txt, the size cap and the redirect check. A new city's portal has to be added to that set, and each dataset registered in `DATASET_POLICY`, before it is queried; otherwise a Fetch run could archive row-level data before `check_personal_data` rejects it, and the loop would then discard the run.
