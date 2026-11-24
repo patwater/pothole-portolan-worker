@@ -1,6 +1,6 @@
-stage: scouted
+stage: discovered
 blocked_on: null
 last_run:
-  behavior: scout
+  behavior: discover
   date: '2026-11-24'
   workflow_run: '45340105700'
