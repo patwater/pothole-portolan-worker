@@ -77,9 +77,14 @@ jobs:
         with:
           python-version: "3.13"
 
-      - name: Install the Claude Code CLI and the Python requirements
+      - name: Install the Claude Code CLI, the Python requirements and pdftotext
         if: steps.pause.outputs.paused == 'false'
         run: |
+          # pdftotext (poppler-utils) reads archived PDFs in the extract and assess scripts and their tests.
+          # The ubuntu-latest image does not include it (run 45339736756 failed its tests without it).
+          sudo apt-get update -qq
+          sudo apt-get install -y -qq poppler-utils
+          pdftotext -v 2>&1 | head -1
           npm install -g "@anthropic-ai/claude-code@${CLAUDE_CODE_VERSION}"
           claude --version
           python3 -m pip install -r scripts/requirements.txt
