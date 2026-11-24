@@ -3,12 +3,12 @@
 # Markdown last sent, so an unchanged draft is not sent again.
 items:
   san-francisco:
-    content_sha256: 47d5e730e7fc0737d69bd47776e3d3594f1f888464c6216a5e6c6f223f7a41fd
+    content_sha256: 4d3264d012793537efa0e0bd2f0f9cec5c2762ee14c6624040248acdcb14fd3e
     dossier_version: 1
     draft: queue/drafts/san-francisco-v1.md
     item_id: 1a5p1qapbcf4ff2ym7k505p2e9
-    published_version: 0
-    pushed: '2026-11-23T22:02:48Z'
-    revision: 1
-    status: draft
+    published_version: 1
+    pushed: '2026-11-24T06:04:13Z'
+    revision: 3
+    status: public
 studio: https://potholeportolan.org/
