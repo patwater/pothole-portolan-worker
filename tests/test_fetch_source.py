@@ -210,5 +210,41 @@ class RunTest(unittest.TestCase):
         self.assertEqual(self.sources()[0]["status"], "unavailable")
 
 
+    def test_a_grouped_query_gets_the_long_timeout_and_other_urls_the_short_one(self):
+        self.assertEqual(fs.timeout_for(AGG), fs.QUERY_TIMEOUT)
+        self.assertEqual(fs.timeout_for(META), fs.TIMEOUT)
+        self.assertEqual(fs.timeout_for("https://www.sf.gov/x"), fs.TIMEOUT)
+        self.assertGreater(fs.QUERY_TIMEOUT, fs.TIMEOUT)
+
+    def test_a_timeout_keeps_the_source_listed_and_is_retried_at_most_three_times(self):
+        self.responses[META] = TimeoutError("timed out")
+        self.write_sources([META])
+        for attempt in (1, 2):
+            self.assertEqual(self.run_fetch(), 2)
+            entry = self.sources()[0]
+            self.assertEqual(entry["status"], "listed")
+            self.assertEqual(entry["notes"].count(fs.RETRY_MARK), attempt)
+        self.assertEqual(self.run_fetch(), 0)
+        entry = self.sources()[0]
+        self.assertEqual(entry["status"], "unavailable")
+        self.assertIn("repeated temporary failures", entry["notes"])
+
+    def test_the_other_temporary_failures_count_toward_the_same_cap(self):
+        fs.robots_allows = lambda url: (False, fs.TRANSIENT)
+        self.write_sources(["https://www.sf.gov/p"])
+        self.run_fetch()
+        self.run_fetch()
+        self.run_fetch()
+        self.assertEqual(self.sources()[0]["status"], "unavailable")
+
+    def test_one_slow_source_does_not_stop_the_others_being_archived(self):
+        other = "https://data.sf.gov/api/views/wxyz-9876.json"
+        self.responses[META] = TimeoutError("timed out")
+        self.responses[other] = b"{}"
+        self.write_sources([META, other])
+        self.assertEqual(self.run_fetch(), 2)
+        self.assertEqual([s["status"] for s in self.sources()], ["listed", "fetched"])
+
+
 if __name__ == "__main__":
     unittest.main()

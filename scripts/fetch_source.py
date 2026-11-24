@@ -64,6 +64,9 @@ FORBIDDEN_GROUP_KEY = re.compile(
     r"description|comment|notes?|media|url|requester|reporter|caller|"
     r"(^|_)id(\b|_)|request_id|case_id|ticket|number)", re.I)
 TIMEOUT = 60
+# A grouped query over millions of 311 rows can take minutes to answer. A flat 60 seconds timed
+# out on Chicago's current feed (run 45340105700), and it would time out again on every retry.
+QUERY_TIMEOUT = 240
 EXT_BY_TYPE = {
     "text/html": ".html", "application/xhtml+xml": ".html", "application/pdf": ".pdf",
     "text/csv": ".csv", "application/json": ".json", "text/plain": ".txt",
@@ -382,15 +385,45 @@ class RobotsAwareRedirects(urllib.request.HTTPRedirectHandler):
         return super().redirect_request(req, fp, code, msg, headers, newurl)
 
 
+def timeout_for(url):
+    """Seconds to wait for a response: longer for a grouped query on an open data portal."""
+    parts = urllib.parse.urlsplit(url)
+    on_portal = (parts.hostname or "").lower() in AGGREGATE_ONLY_HOSTS
+    return QUERY_TIMEOUT if on_portal and RESOURCE_PATH.match(parts.path) else TIMEOUT
+
+
 def fetch(url):
     req = urllib.request.Request(url, headers={"User-Agent": USER_AGENT, "Accept": "*/*"})
     opener = urllib.request.build_opener(RobotsAwareRedirects)
-    cap = AGGREGATE_MAX_BYTES if (urllib.parse.urlsplit(url).hostname or "").lower() in AGGREGATE_ONLY_HOSTS else MAX_BYTES
-    with opener.open(req, timeout=TIMEOUT) as resp:
+    parts = urllib.parse.urlsplit(url)
+    on_portal = (parts.hostname or "").lower() in AGGREGATE_ONLY_HOSTS
+    cap = AGGREGATE_MAX_BYTES if on_portal else MAX_BYTES
+    with opener.open(req, timeout=timeout_for(url)) as resp:
         body = resp.read(cap + 1)
         if len(body) > cap:
             raise ValueError(f"larger than {cap} bytes")
         return body, resp.geturl(), resp.headers.get("Content-Type", ""), resp.status
+
+
+MAX_TRANSIENT_ATTEMPTS = 3
+RETRY_MARK = "left listed to retry later"
+
+
+def leave_listed(entry, today, why):
+    """Record a temporary failure. Returns True if the source stays listed for another run.
+
+    A temporary failure says nothing about the source, so the source is retried, but not forever:
+    on the third attempt it is recorded as unavailable, with the reason in its notes.
+    """
+    attempts = (entry.get("notes") or "").count(RETRY_MARK) + 1
+    if attempts >= MAX_TRANSIENT_ATTEMPTS:
+        entry["status"] = "unavailable"
+        entry["retrieved"] = today
+        append_note(entry, f"Fetch {today}: {why}. Attempt {attempts} of {MAX_TRANSIENT_ATTEMPTS}, so recorded as "
+                           "unavailable because of repeated temporary failures, not because the source refused.")
+        return False
+    append_note(entry, f"Fetch {today}: {why}; {RETRY_MARK} (attempt {attempts} of {MAX_TRANSIENT_ATTEMPTS}).")
+    return True
 
 
 def advance_stage(root, slug):
@@ -444,9 +477,16 @@ def run(root, slug, only_ids, delay, limit=20):
             continue
         requests += 1
         allowed, robots_detail = robots_allows(url)
-        if robots_detail in (BLOCKED, TRANSIENT):
+        if robots_detail == BLOCKED:
             print(f"BLOCKED     {entry['id']}: {robots_detail}; left as listed")
             blocked += 1
+            continue
+        if robots_detail == TRANSIENT:
+            if leave_listed(entry, today, "robots.txt could not be read (temporary network failure)"):
+                print(f"BLOCKED     {entry['id']}: {robots_detail}; left as listed")
+                blocked += 1
+            else:
+                print(f"UNAVAILABLE {entry['id']}: {robots_detail} on repeated attempts")
             continue
         if not allowed:
             entry["status"] = "unavailable"
@@ -467,14 +507,18 @@ def run(root, slug, only_ids, delay, limit=20):
         except urllib.error.HTTPError as exc:
             if exc.code == 429:
                 rate_limited_hosts.add(host)
-                append_note(entry, f"Fetch {today}: HTTP 429 (rate limited); left listed to retry later.")
-                print(f"RATE-LIMITED {entry['id']}: HTTP 429 from {host}; left as listed")
-                blocked += 1
+                if leave_listed(entry, today, "HTTP 429 (rate limited)"):
+                    print(f"RATE-LIMITED {entry['id']}: HTTP 429 from {host}; left as listed")
+                    blocked += 1
+                else:
+                    print(f"UNAVAILABLE {entry['id']}: HTTP 429 on repeated attempts")
                 continue
             if exc.code >= 500:
-                append_note(entry, f"Fetch {today}: HTTP {exc.code}; left listed to retry later.")
-                print(f"BLOCKED     {entry['id']}: HTTP {exc.code}, {TRANSIENT}; left as listed")
-                blocked += 1
+                if leave_listed(entry, today, f"HTTP {exc.code}"):
+                    print(f"BLOCKED     {entry['id']}: HTTP {exc.code}, {TRANSIENT}; left as listed")
+                    blocked += 1
+                else:
+                    print(f"UNAVAILABLE {entry['id']}: HTTP {exc.code} on repeated attempts")
                 continue
             entry["status"] = "unavailable"
             entry["retrieved"] = today
@@ -486,8 +530,11 @@ def run(root, slug, only_ids, delay, limit=20):
                 print(f"BLOCKED     {entry['id']}: {BLOCKED}; left as listed")
                 blocked += 1
                 continue
-            print(f"BLOCKED     {entry['id']}: {type(exc).__name__}, {TRANSIENT}; left as listed")
-            blocked += 1
+            if leave_listed(entry, today, f"{type(exc).__name__}, a temporary network failure"):
+                print(f"BLOCKED     {entry['id']}: {type(exc).__name__}, {TRANSIENT}; left as listed")
+                blocked += 1
+            else:
+                print(f"UNAVAILABLE {entry['id']}: {type(exc).__name__} on repeated attempts")
             continue
         try:
             if aggregate_rows_exceeded(url, body):

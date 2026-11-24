@@ -29,6 +29,7 @@ OUTCOME_TEXT = {
     "nothing_to_do": "Stopped: nothing left to do.",
     "draft_queued": "Stopped: a draft is waiting for the supervisor.",
     "blocked": "Stopped: a city is blocked.",
+    "fetch_incomplete": "Stopped: Fetch kept what it fetched and left some sources to retry on the next run.",
     "max_behaviors": "Stopped: the per-run limit of behaviors was reached.",
     "failed": "Stopped: a behavior failed and was discarded.",
 }

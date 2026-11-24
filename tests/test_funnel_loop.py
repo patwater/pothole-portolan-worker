@@ -347,5 +347,57 @@ class FunnelTest(unittest.TestCase):
         self.assertEqual(len(rows), 3)
 
 
+    # ---- a fetch cut short by a temporary failure keeps its progress ----
+    def write_sources(self, city, statuses):
+        self.write(f"cities/{city}/sources.yaml", yaml.safe_dump(
+            [{"id": f"s{i}", "name": "n", "source_type": "other", "url": f"https://example.org/{i}", "status": st,
+              **({"retrieved": "2026-11-20", "archive": "sources/" + "a" * 64 + ".json", "robots_checked": True}
+                 if st == "fetched" else {})} for i, st in enumerate(statuses)], sort_keys=False))
+
+    def discovered_city(self):
+        self.set_status("alpha", "discovered")
+        self.write_sources("alpha", ["listed", "listed"])
+        self.git("add", "-A"), self.git("commit", "-q", "-m", "s")
+
+    def test_a_fetch_that_fetched_some_and_left_others_listed_is_kept_and_does_not_block_the_city(self):
+        self.discovered_city()
+
+        def partial(city, behavior, stage):
+            self.write_sources(city, ["fetched", "listed"])  # what fetch_source.py leaves after a timeout
+        self.script = partial
+        out = self.funnel().run()
+        self.assertEqual(out["outcome"], "fetch_incomplete")
+        self.assertEqual(len(self.calls), 1)
+        statuses = [s["status"] for s in yaml.safe_load((self.root / "cities/alpha/sources.yaml").read_text())]
+        self.assertEqual(statuses, ["fetched", "listed"])
+        status = yaml.safe_load((self.root / "cities/alpha/status.yaml").read_text())
+        self.assertIsNone(status["blocked_on"])
+        self.assertEqual(status["stage"], "discovered")
+        self.assertIn("fetch: alpha", self.git("log", "-1", "--format=%s"))
+        self.assertEqual(self.ledger_rows()[-1]["behavior"], "fetch")
+        self.assertEqual(next_behavior.pick(self.root)[0]["behavior"], "fetch")  # the next run retries it
+        self.assertEqual(self.git("status", "--porcelain"), "")
+
+    def test_a_fetch_that_changed_nothing_is_still_a_failure(self):
+        self.discovered_city()
+        self.script = lambda city, behavior, stage: None  # the script never ran
+        out = self.funnel().run()
+        self.assertEqual(out["outcome"], "failed")
+        status = yaml.safe_load((self.root / "cities/alpha/status.yaml").read_text())
+        self.assertEqual(status["blocked_on"]["type"], "run_failure")
+
+    def test_a_fetch_with_nothing_left_listed_must_still_advance_the_stage(self):
+        self.discovered_city()
+        self.script = lambda city, behavior, stage: self.write_sources(city, ["fetched", "fetched"])
+        self.assertEqual(self.funnel().run()["outcome"], "failed")
+
+    def test_only_fetch_gets_this_allowance(self):
+        self.set_status("alpha", "fetched")
+        self.write_sources("alpha", ["listed"])
+        self.git("add", "-A"), self.git("commit", "-q", "-m", "s")
+        self.script = lambda city, behavior, stage: self.write_sources(city, ["fetched"])
+        self.assertEqual(self.funnel().run()["outcome"], "failed")  # extract changed sources but not the stage
+
+
 if __name__ == "__main__":
     unittest.main()

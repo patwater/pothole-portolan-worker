@@ -1,9 +1,5 @@
 stage: discovered
-blocked_on:
-  type: run_failure
-  ref: 2026-11-24-fetch-45340105700
-  note: 'fetch failed: the stage did not change from discovered and nothing is recorded
-    as blocking'
+blocked_on: null
 last_run:
   behavior: fetch
   date: '2026-11-24'

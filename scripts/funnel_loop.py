@@ -266,6 +266,7 @@ class Funnel:
     def step(self, n, choice, remaining):
         """Run one behavior. Returns (stop_outcome, message), or (None, None) to keep looping."""
         city, behavior, stage_before = choice["city"], choice["behavior"], choice["stage"]
+        self.incomplete = False
         now = self.now()
         argv, credentials = build_invocation(self.registry, behavior, city, stage_before,
                                              now.date().isoformat(), remaining)
@@ -310,11 +311,26 @@ class Funnel:
         if reason:
             return (soft_stop or "failed"), f"{behavior} on {city}: {reason}"
         status, _ = self.read_status(city)
+        if self.incomplete:
+            return "fetch_incomplete", (f"fetch on {city} fetched what it could and left some sources listed after a "
+                                        "temporary failure; the next run retries them. The city is not blocked.")
         if status["blocked_on"]:
             return "blocked", f"{behavior} on {city} ended blocked on {status['blocked_on']['type']} {status['blocked_on']['ref']}."
         if stage_after == "queued":
             return "draft_queued", f"a draft for {city} is in queue/drafts/ waiting for the supervisor."
         return None, None
+
+    def fetch_left_work(self, city):
+        """True when Fetch touched sources.yaml and sources are still listed: it ran, and was cut short."""
+        path = self.root / "cities" / city / "sources.yaml"
+        if not path.is_file():
+            return False
+        changed = git(self.root, "status", "--porcelain", "--", f"cities/{city}/sources.yaml").strip()
+        try:
+            listed = any(isinstance(e, dict) and e.get("status") == "listed" for e in validate.load_yaml(path))
+        except Exception:
+            return False
+        return bool(changed) and listed
 
     def judge(self, result, error, cost, city, stage_before, behavior):
         """Return (reason, block_city, soft_stop_outcome). reason None means keep the changes."""
@@ -337,7 +353,13 @@ class Funnel:
         if RANK[stage_after] > RANK[stage_before] + 1:
             return f"stage jumped from {stage_before} to {stage_after}; a behavior may advance one stage", True, None
         if stage_after == stage_before and not status["blocked_on"]:
-            return f"the stage did not change from {stage_before} and nothing is recorded as blocking", True, None
+            if behavior == "fetch" and self.fetch_left_work(city):
+                # Some sources were left listed after a temporary failure. What was fetched is real
+                # progress, so it is kept; the next run retries the rest. (First seen 2026-11-24,
+                # run 45340105700: this was judged a failure and a good archive was thrown away.)
+                self.incomplete = True
+            else:
+                return f"the stage did not change from {stage_before} and nothing is recorded as blocking", True, None
         if stage_after == "queued" and not list((self.root / "queue" / "drafts").glob(f"{city}-*")):
             return "stage is queued but queue/drafts/ has no draft for the city", True, None
         pre_draft = RANK[stage_after] < RANK["drafted"]
