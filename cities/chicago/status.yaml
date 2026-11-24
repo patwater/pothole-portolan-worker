@@ -1,8 +1,5 @@
 stage: proposed
-blocked_on:
-  type: run_failure
-  ref: 2026-11-24-scout-45339736756
-  note: 'scout failed: tests failed:'
+blocked_on: null
 last_run:
   behavior: scout
   date: '2026-11-24'
