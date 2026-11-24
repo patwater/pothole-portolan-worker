@@ -1,6 +1,10 @@
 stage: discovered
-blocked_on: null
+blocked_on:
+  type: run_failure
+  ref: 2026-11-24-fetch-45340105700
+  note: 'fetch failed: the stage did not change from discovered and nothing is recorded
+    as blocking'
 last_run:
-  behavior: extract
+  behavior: fetch
   date: '2026-11-24'
   workflow_run: '45340105700'
