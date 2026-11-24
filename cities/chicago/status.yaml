@@ -1,6 +1,6 @@
-stage: fetched
+stage: discovered
 blocked_on: null
 last_run:
-  behavior: fetch
+  behavior: extract
   date: '2026-11-24'
   workflow_run: '45340105700'

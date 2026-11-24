@@ -122,3 +122,19 @@
   retrieved: '2026-11-24'
   archive: sources/1fa1086fffd1e1a73112004fbd37d65152bf4192029ec4a41bfb89c6f82bc833.html
   robots_checked: true
+- id: chi-311-pothole-by-year-status
+  name: 311 pothole requests by type, year, status and duplicate flag (v6vf-nfxy, grouped counts)
+  publisher: City of Chicago
+  source_type: open_data_portal
+  url: https://data.cityofchicago.org/resource/v6vf-nfxy.json?$select=sr_type,%20date_extract_y(created_date)%20as%20yr,%20status,%20duplicate,%20legacy_record,%20count(*)%20as%20n&$where=upper(sr_type)%20like%20'%25POTHOLE%25'&$group=sr_type,%20yr,%20status,%20duplicate,%20legacy_record&$having=count(*)%20%3E%3D%2010&$order=yr,%20sr_type&$limit=5000
+  status: listed
+  notes: 'Aggregate query, no records. Purpose: reported_demand counts of pothole-type 311 requests per
+    year, with status, duplicate and legacy flags, for the current feed'
+- id: chi-311-pothole-historical-by-year
+  name: Historical pothole requests by year, status and request type (7as2-ds3y, grouped counts)
+  publisher: City of Chicago
+  source_type: open_data_portal
+  url: https://data.cityofchicago.org/resource/7as2-ds3y.json?$select=date_extract_y(creation_date)%20as%20yr,%20status,%20type_of_service_request,%20count(*)%20as%20n,%20sum(number_of_potholes_filled_on_block)%20as%20potholes_filled&$group=yr,%20status,%20type_of_service_request&$having=count(*)%20%3E%3D%2010&$order=yr&$limit=5000
+  status: listed
+  notes: 'Aggregate query, no records. Purpose: reported_demand counts and program_output (potholes filled
+    per block, as recorded) per year for the historical dataset'

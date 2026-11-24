@@ -35,3 +35,7 @@ Behavior: Scout, 2026-11-24. Nothing here is a claim. Every statement below is a
 ## Scout result (2026-11-24)
 
 No sources listed, none fetched, no claims written. `claims.yaml` and `sources.yaml` are empty lists, as the content checks require from this stage. The next behavior is Discover.
+
+## Extract result (2026-11-24)
+
+No claims written. The archived copies of the two 311 datasets are metadata only (column lists), and no archived source holds a count, so any number would have come from memory. Two grouped-count queries were listed in `sources.yaml` instead: `chi-311-pothole-by-year-status` (current feed, pothole-type rows by year, status, duplicate and legacy flags) and `chi-311-pothole-historical-by-year` (historical dataset, by year, status and request type, plus the recorded potholes-filled sum). Both pass the aggregate-only policy. The stage goes back to discovered so Fetch archives them. Still unread: the CDOT service page text (a stated target, if any) and the BGA snapshot; the official 2026 budget book URL is still needed. OIG audits remain unavailable (robots 403).
