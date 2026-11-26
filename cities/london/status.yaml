@@ -1,0 +1,10 @@
+stage: proposed
+blocked_on:
+  type: run_failure
+  ref: 2026-11-26-scout-45885560800
+  note: 'scout failed: the invocation did not finish cleanly (subtype ''success'',
+    is_error True, turns 1)'
+last_run:
+  behavior: scout
+  date: '2026-11-26'
+  workflow_run: '45885560800'

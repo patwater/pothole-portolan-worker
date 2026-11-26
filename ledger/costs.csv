@@ -24,3 +24,4 @@ timestamp_utc,behavior,model_tier,input_tokens,output_tokens,usd,note
 2026-11-24T06:25:40Z,fetch,small,4,749,0.003456,city=chicago; turns=2; session=c6a93925-0c8a-42d2-9513-6ff061dbc26a; cache_read=22067; cache_creation=22882; run=45340105700; outcome=ok
 2026-11-24T06:26:46Z,extract,medium,14,3430,0.113625,city=chicago; turns=7; session=cebfe35e-86ca-4c58-8447-b06887b1c03f; cache_read=196421; cache_creation=23862; run=45340105700; outcome=ok
 2026-11-24T06:27:18Z,fetch,small,4,548,0.001764,city=chicago; turns=2; session=502a30ac-4275-40aa-a8dc-7738f6c4c107; cache_read=35337; cache_creation=9093; run=45340105700; outcome=failed
+2026-11-26T19:42:17Z,scout,small,0,0,0.000000,city=london; turns=1; session=b6ba581b-f017-4f0a-a81c-ee3d81c0c385; cache_read=0; cache_creation=0; run=45885560800; outcome=failed
